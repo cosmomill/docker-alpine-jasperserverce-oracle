@@ -1,6 +1,4 @@
-#FROM tomcat:8.0-jre8-alpine
-# workaround until this bug is fixed https://bugs.alpinelinux.org/issues/7372
-FROM cosmomill/alpine-tomcat-jre8
+FROM tomcat:8.5-jre8-alpine
 
 MAINTAINER Rene Kanzler, me at renekanzler dot com
 
@@ -29,8 +27,8 @@ ENV DATABASE_PORT 1521
 RUN mkdir /docker-entrypoint-import.d
 
 # download and extract JasperReports Server
-ENV JASPERSERVER_VERSION 6.3.0
-ENV JASPERSERVER_DOWNLOAD_URL http://downloads.sourceforge.net/project/jasperserver/JasperServer/JasperReports%20Server%20Community%20Edition%20$JASPERSERVER_VERSION/jasperreports-server-cp-$JASPERSERVER_VERSION-bin.zip
+ENV JASPERSERVER_VERSION 7.1.0
+ENV JASPERSERVER_DOWNLOAD_URL http://downloads.sourceforge.net/project/jasperserver/JasperServer/JasperReports%20Server%20Community%20Edition%20${JASPERSERVER_VERSION}/TIB_js-jrs-cp_${JASPERSERVER_VERSION}_bin.zip
 ENV JASPERSERVER_BUILDOMATIC_DIR /usr/src/jasperserver/buildomatic
 
 RUN mkdir /usr/src \

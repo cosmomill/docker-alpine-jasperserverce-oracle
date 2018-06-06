@@ -20,7 +20,7 @@ else
 			chown root:root $JASPERSERVER_PWD_FILE
 		fi;
 	else
-			echo "Oracle configuration folder not found, run docker with: --volumes-from cosmomill/alpine-oracle-xe."
+			echo "Oracle configuration folder not found, run docker with: --volumes-from host $DATABASE_HOSTNAME."
 			exit 1
 	fi;
 
