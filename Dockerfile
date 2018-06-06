@@ -14,7 +14,11 @@ RUN apk --update add --no-cache libarchive-tools
 # install some basic fonts for JasperReports Server
 RUN apk --update add --no-cache ttf-dejavu
 
+# install ncurses cause SQLcl needs tput
+RUN apk --update add --no-cache ncurses
+
 ONBUILD ARG ORACLE_JDBC_DRIVER
+ONBUILD ARG SQLCL_FILE
 
 ENV TZ GMT
 ENV TOMCAT_HOME /usr/local/tomcat
@@ -62,8 +66,19 @@ RUN chmod 755 /usr/src/jasperserver \
 	&& chmod 755 /usr/src/jasperserver/apache-ant/bin/ant \
 	&& chmod 755 $JASPERSERVER_BUILDOMATIC_DIR/js-ant
 
+ENV SQLCL_VERSION 18.1.1
+
+# install SQLcl
+ONBUILD ADD $SQLCL_FILE /tmp/
+ONBUILD RUN bsdtar -C /var/lib -xf /tmp/sqlcl-$SQLCL_VERSION.zip \
+	&& ln -s /var/lib/sqlcl/bin/sql /usr/local/bin/sqlcl \
+	&& rm -f /tmp/sqlcl-$SQLCL_VERSION.zip
+
 # define mountable directories
 VOLUME /usr/src/jasperserver $TOMCAT_HOME/webapps
+
+COPY wait-for-oracle.sh /usr/local/bin/
+RUN chmod 755 /usr/local/bin/wait-for-oracle.sh
 
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/docker-entrypoint.sh
